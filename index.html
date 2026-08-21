@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>On Completed Infinity</title>
+<meta name="description" content="A short position note on potential versus actual infinity, the Axiom of Infinity, and the difference between disputing a premise and alleging an error.">
+<meta name="author" content="ndg13b">
+<meta property="og:type" content="article">
+<meta property="og:title" content="On Completed Infinity">
+<meta property="og:description" content="A short position note on potential versus actual infinity, the Axiom of Infinity, and the difference between disputing a premise and alleging an error.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='25' x='2' font-size='24' font-family='serif'>&#8734;</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,200..700;1,6..72,200..600&display=swap">
+<style>
+/* ---- tokens: light is the base, both dark states redefine only tokens ---- */
+:root {
+  --ground:#ECEEF2; --paper:#F8F9FB; --sunk:#E6E9EF;
+  --ink:#15181F; --ink-2:#4C5364; --ink-3:#6E7587;
+  --rule:#D3D7E0; --rule-2:#E3E6ED;
+  --accent:#1C5661; --accent-line:#4E8C97; --accent-soft:#E2EDEE;
+  --dispute:#9B3A32; --dispute-line:#C1776F; --dispute-soft:#F4E5E3;
+  --serif:"Newsreader",ui-serif,Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground:#0E1116; --paper:#161922; --sunk:#1C202A;
+    --ink:#E7E9EF; --ink-2:#A6ADBC; --ink-3:#848C9D;
+    --rule:#2B303B; --rule-2:#232833;
+    --accent:#7FBDC7; --accent-line:#3F6E77; --accent-soft:#163035;
+    --dispute:#E0958D; --dispute-line:#8A4C45; --dispute-soft:#33201E;
+  }
+}
+:root[data-theme="dark"] {
+  --ground:#0E1116; --paper:#161922; --sunk:#1C202A;
+  --ink:#E7E9EF; --ink-2:#A6ADBC; --ink-3:#848C9D;
+  --rule:#2B303B; --rule-2:#232833;
+  --accent:#7FBDC7; --accent-line:#3F6E77; --accent-soft:#163035;
+  --dispute:#E0958D; --dispute-line:#8A4C45; --dispute-soft:#33201E;
+}
+
+*,*::before,*::after { box-sizing:border-box; }
+html { -webkit-text-size-adjust:100%; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior:smooth; } }
+
+body {
+  margin:0;
+  background:var(--ground);
+  color:var(--ink);
+  font-family:var(--serif);
+  font-optical-sizing:auto;
+  font-size:clamp(1.0625rem, 0.5vw + 0.96rem, 1.1875rem);
+  font-weight:400;
+  line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+/* ---- the sheet ---- */
+.page {
+  max-width:78rem;
+  margin-inline:auto;
+  background:var(--paper);
+  padding:clamp(2.75rem,7vw,5.5rem) clamp(1.25rem,5vw,3rem) clamp(3rem,6vw,5rem);
+}
+@media (min-width:79rem) { .page { border-inline:1px solid var(--rule-2); } }
+
+.col { width:min(100%,68ch); margin-inline:auto; }
+
+/* ---- hero ---- */
+.hero { display:flex; flex-direction:column; gap:1.5rem; }
+.eyebrow {
+  margin:0; font-family:var(--mono); font-size:.7rem; font-weight:500;
+  letter-spacing:.2em; text-transform:uppercase; color:var(--ink-3);
+}
+.glyph {
+  font-family:var(--mono); font-weight:400;
+  font-size:clamp(2.1rem,8.5vw,4.25rem);
+  line-height:1.1; letter-spacing:.06em;
+  color:var(--ink); white-space:nowrap;
+  overflow-x:auto; overflow-y:hidden; scrollbar-width:none;
+  padding-block:.15em;
+}
+.glyph::-webkit-scrollbar { display:none; }
+.glyph > * { display:inline-block; }
+.glyph .dot { margin-right:.34em; }
+.glyph .dot i {
+  display:inline-block; width:.15em; height:.15em;
+  border-radius:50%; background:currentColor; vertical-align:baseline;
+}
+.glyph .dot--1 i { opacity:.62; }
+.glyph .dot--2 i { opacity:.36; }
+.glyph .dot--3 i { opacity:.17; }
+.glyph .gap { width:.34em; }
+.glyph .close { color:var(--dispute); font-weight:500; }
+@media (prefers-reduced-motion: no-preference) {
+  .glyph > * { animation:rise .55s cubic-bezier(.2,.75,.3,1) backwards; }
+  .glyph .open   { animation-delay:.05s; }
+  .glyph .terms  { animation-delay:.16s; }
+  .glyph .dot--1 { animation-delay:.36s; }
+  .glyph .dot--2 { animation-delay:.50s; }
+  .glyph .dot--3 { animation-delay:.64s; }
+  .glyph .close  { animation-delay:1.0s; animation-duration:.7s; }
+}
+@keyframes rise { from { opacity:0; transform:translateY(.3em); } to { opacity:1; transform:none; } }
+
+.glyph-note {
+  margin:0; max-width:34ch;
+  font-size:.9375rem; font-style:italic; font-weight:300;
+  line-height:1.5; color:var(--ink-2);
+}
+.hero h1 {
+  margin:0; font-weight:400;
+  font-size:clamp(2.15rem,6.5vw,3.4rem);
+  line-height:1.06; letter-spacing:-.022em;
+  text-wrap:balance;
+}
+.dek {
+  margin:0; max-width:44ch;
+  font-size:clamp(1.125rem,2.2vw,1.3125rem);
+  font-style:italic; font-weight:300; line-height:1.45; color:var(--ink-2);
+  text-wrap:pretty;
+}
+.hero-rule { height:1px; background:var(--rule); border:0; margin:.5rem 0 0; }
+
+/* ---- contents ---- */
+.contents { margin:0; padding:0; list-style:none;
+  display:grid; grid-template-columns:1fr; gap:.55rem 2.5rem; }
+@media (min-width:38rem) { .contents { grid-template-columns:1fr 1fr; } }
+.contents a {
+  display:flex; gap:.85rem; align-items:baseline;
+  font-family:var(--mono); font-size:.8125rem; line-height:1.4;
+  color:var(--ink-2); text-decoration:none;
+  border-bottom:1px solid transparent; padding-bottom:.1rem;
+}
+.contents a:hover { color:var(--ink); border-bottom-color:var(--rule); }
+.contents .n { color:var(--accent); flex:none; }
+
+/* ---- article ---- */
+.article { display:flex; flex-direction:column; gap:clamp(3rem,6.5vw,4.75rem); margin-top:clamp(3.5rem,8vw,6rem); }
+.sec { position:relative; scroll-margin-top:2rem; }
+.sec-num {
+  margin:0 0 .5rem; font-family:var(--mono); font-size:.75rem; font-weight:500;
+  letter-spacing:.08em; color:var(--accent);
+}
+@media (min-width:64rem) {
+  .sec-num { position:absolute; left:-4.75rem; top:.75rem; margin:0; text-align:right; width:3.25rem; }
+}
+.sec-body { display:flex; flex-direction:column; gap:1.1em; }
+.sec h2 {
+  margin:0; font-weight:400;
+  font-size:clamp(1.45rem,3.4vw,1.9rem);
+  line-height:1.18; letter-spacing:-.016em; text-wrap:balance;
+}
+.sec p { margin:0; text-wrap:pretty; }
+em, cite { font-style:italic; }
+cite { font-weight:400; }
+strong { font-weight:600; }
+code {
+  font-family:var(--mono); font-size:.86em;
+  background:var(--sunk); border:1px solid var(--rule-2);
+  border-radius:2px; padding:.08em .28em;
+}
+sup { font-size:.68em; line-height:0; vertical-align:.55em; }
+
+a { color:var(--accent); text-decoration-line:underline; text-decoration-thickness:1px;
+    text-underline-offset:.18em; text-decoration-color:var(--accent-line); }
+a:hover { text-decoration-thickness:2px; text-decoration-color:var(--accent); }
+:focus-visible { outline:2px solid var(--accent); outline-offset:3px; border-radius:2px; }
+
+/* ---- the two claims: one true, one false ---- */
+.claims { margin:.35rem 0; padding:0; list-style:none;
+  display:flex; flex-direction:column; gap:0;
+  border-block:1px solid var(--rule); }
+.claims li {
+  display:grid; grid-template-columns:1.85rem minmax(0,1fr) auto;
+  gap:0 1rem; align-items:baseline; padding:1.05rem 0;
+}
+.claims li + li { border-top:1px solid var(--rule-2); }
+.claims .n { font-family:var(--mono); font-size:.8125rem; color:var(--ink-3); }
+.claims .t { font-size:1.03em; line-height:1.5; }
+.verdict {
+  font-family:var(--mono); font-size:.6875rem; font-weight:500;
+  letter-spacing:.14em; text-transform:uppercase;
+  padding:.25em .6em; border-radius:2px; border:1px solid; white-space:nowrap;
+}
+.verdict.is-true  { color:var(--accent);  border-color:var(--accent-line);  background:var(--accent-soft); }
+.verdict.is-false { color:var(--dispute); border-color:var(--dispute-line); background:var(--dispute-soft); }
+@media (max-width:36rem) {
+  .claims li { grid-template-columns:1.85rem minmax(0,1fr); }
+  .verdict { grid-column:2; justify-self:start; margin-top:.7rem; }
+}
+
+/* ---- the fork: two readings ---- */
+.fork { display:grid; grid-template-columns:1fr; gap:2rem; margin:.5rem 0; }
+@media (min-width:50rem) { .fork { grid-template-columns:1fr 1fr; gap:2.75rem; } }
+.fork-side { display:flex; flex-direction:column; gap:.7rem; padding-top:.9rem; border-top:2px solid; }
+.fork-side.is-accept { border-top-color:var(--accent-line); }
+.fork-side.is-reject { border-top-color:var(--dispute-line); }
+.fork-label {
+  margin:0; font-family:var(--mono); font-size:.7rem; font-weight:500;
+  letter-spacing:.14em; text-transform:uppercase;
+}
+.is-accept .fork-label { color:var(--accent); }
+.is-reject .fork-label { color:var(--dispute); }
+.fork-side p:not(.fork-label) { margin:0; font-size:.975em; line-height:1.55; color:var(--ink-2); }
+
+/* ---- pull quote ---- */
+.pull { margin:1rem 0; display:flex; flex-direction:column; gap:1.15rem; align-items:flex-start; }
+.pull hr { width:3.5rem; height:1px; background:var(--accent-line); border:0; margin:0; }
+.pull p {
+  margin:0; max-width:24ch;
+  font-size:clamp(1.35rem,3.6vw,1.85rem);
+  font-weight:300; font-style:italic; line-height:1.3;
+  letter-spacing:-.012em; color:var(--ink); text-wrap:balance;
+}
+
+/* ---- roster ---- */
+.roster { margin:.35rem 0; padding:0; list-style:none;
+  display:flex; flex-direction:column; border-top:1px solid var(--rule); }
+.roster li { padding:.95rem 0; border-bottom:1px solid var(--rule-2); }
+.roster li:last-child { border-bottom:1px solid var(--rule); }
+.roster .who {
+  display:block; font-size:1.06em; font-weight:600; letter-spacing:.004em; color:var(--ink);
+}
+.roster .who-inline { font-weight:600; color:var(--ink); }
+.roster .what { display:block; margin-top:.2rem; font-size:.975em; line-height:1.55; color:var(--ink-2); }
+
+/* ---- summary + coda ---- */
+.points { margin:.35rem 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:1rem; }
+.points li { display:grid; grid-template-columns:1.25rem minmax(0,1fr); gap:.75rem; align-items:baseline; }
+.points li::before { content:"—"; font-family:var(--mono); font-size:.8125rem; color:var(--accent); }
+.coda {
+  margin:.75rem 0 0; padding-top:1.5rem; border-top:1px solid var(--rule);
+  font-size:1.1em; font-style:italic; font-weight:300; line-height:1.5; color:var(--ink);
+}
+
+/* ---- footer ---- */
+.foot { margin-top:clamp(4rem,9vw,6.5rem); padding-top:1.75rem; border-top:1px solid var(--rule);
+  display:flex; flex-direction:column; gap:.85rem; }
+.foot .said { margin:0; font-style:italic; font-weight:300; color:var(--ink-2); font-size:.9375rem; }
+.foot .links { margin:0; font-family:var(--mono); font-size:.75rem; line-height:1.9; color:var(--ink-3); }
+.foot .links a { color:var(--ink-2); text-decoration-color:var(--rule); }
+.foot .links a:hover { color:var(--accent); text-decoration-color:var(--accent); }
+.foot .sep { padding-inline:.6em; color:var(--rule); }
+
+@media (prefers-reduced-motion: reduce) {
+  *,*::before,*::after { animation-duration:.001ms !important; animation-delay:0s !important; transition-duration:.001ms !important; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="hero col">
+    <p class="eyebrow">Position note &nbsp;/&nbsp; 2026</p>
+
+    <div class="glyph" role="img" aria-label="Open brace, one, two, three, ellipsis, close brace">
+      <span class="open" aria-hidden="true">{</span><span class="terms" aria-hidden="true">1,&#8202;2,&#8202;3,</span><span class="gap" aria-hidden="true"></span><span class="dot dot--1" aria-hidden="true"><i></i></span><span class="dot dot--2" aria-hidden="true"><i></i></span><span class="dot dot--3" aria-hidden="true"><i></i></span><span class="gap" aria-hidden="true"></span><span class="close" aria-hidden="true">}</span>
+    </div>
+
+    <p class="glyph-note">&ldquo;&hellip;&#8202;the step &mdash; in whatever notation &mdash; that closes the brace.&rdquo;</p>
+
+    <h1>On Completed Infinity</h1>
+    <p class="dek">A short position note. Not a proof, and not a claim that anyone else is mistaken.</p>
+
+    <hr class="hero-rule">
+
+    <ol class="contents">
+      <li><a href="#s1"><span class="n">&sect;1</span> What this is</a></li>
+      <li><a href="#s2"><span class="n">&sect;2</span> The intuition that started it</a></li>
+      <li><a href="#s3"><span class="n">&sect;3</span> The standard reply, stated fairly</a></li>
+      <li><a href="#s4"><span class="n">&sect;4</span> Where I actually disagree</a></li>
+      <li><a href="#s5"><span class="n">&sect;5</span> The honest status of the disagreement</a></li>
+      <li><a href="#s6"><span class="n">&sect;6</span> What accepting this costs</a></li>
+      <li><a href="#s7"><span class="n">&sect;7</span> The tradition this belongs to</a></li>
+      <li><a href="#s8"><span class="n">&sect;8</span> Summary</a></li>
+    </ol>
+  </header>
+
+  <main class="article col">
+
+    <section class="sec" id="s1">
+      <p class="sec-num">&sect;1</p>
+      <div class="sec-body">
+        <h2>What this is</h2>
+        <p>This is a statement of a position I hold about the foundations of mathematics, written down mostly so that it exists somewhere outside my own head.</p>
+        <p>I am not a mathematician. I have no result to announce and nothing here is new &mdash; the position I describe has been held, in various forms, for a very long time. What follows is my own route to it, an honest account of the standard objection, and a statement of where I think the disagreement actually lies.</p>
+        <p>I want to be clear at the outset about what I am <strong>not</strong> claiming. I am not claiming Cantor made an error. I am not claiming standard set theory is inconsistent. Both of those claims are made frequently by amateurs and both are wrong. My disagreement is with a starting assumption, not with any inference drawn from it.</p>
+      </div>
+    </section>
+
+    <section class="sec" id="s2">
+      <p class="sec-num">&sect;2</p>
+      <div class="sec-body">
+        <h2>The intuition that started it</h2>
+        <p>The usual proof that some infinities are larger than others is Cantor&rsquo;s diagonal argument. Given any proposed list of the real numbers between 0 and 1, you construct a new real number by taking the first digit of the first number, the second digit of the second, and so on, and changing each one. The result differs from every number on the list, so no such list can be complete. The reals are therefore said to be uncountable, in contrast to the natural numbers, which are countable.</p>
+        <p>The obvious question is why the same construction cannot be run on the natural numbers. The answer given is that the diagonal construction produces an object with infinitely many nonzero digits, and every natural number has finitely many digits. The constructed object is therefore not a natural number, and no contradiction follows.</p>
+        <p>That answer is correct, and I accept it. But it raised a different question for me.</p>
+        <p>A finite number of digit places can only express finitely many distinct values. Ten digits per place, <em>n</em> places, at most 10<sup>n</sup> values. So if a set contains infinitely many distinct elements, it seemed to me that infinitely many digit places must be in use somewhere. Yet every natural number is said to have finitely many digits. Where, then, are the infinitely many digit places?</p>
+      </div>
+    </section>
+
+    <section class="sec" id="s3">
+      <p class="sec-num">&sect;3</p>
+      <div class="sec-body">
+        <h2>The standard reply, stated fairly</h2>
+        <p>The reply is that I had conflated two different claims:</p>
+        <ol class="claims">
+          <li>
+            <span class="n">1</span>
+            <span class="t">Every natural number has finitely many digits.</span>
+            <span class="verdict is-true">true</span>
+          </li>
+          <li>
+            <span class="n">2</span>
+            <span class="t">There is a finite bound on how many digits a natural number may have.</span>
+            <span class="verdict is-false">false</span>
+          </li>
+        </ol>
+        <p>The first is true. The second is false. For any bound you propose, some natural number exceeds it. The set therefore uses <strong>unboundedly many</strong> digit places without any individual member using infinitely many. Each element is finite; the collection of lengths has no maximum.</p>
+        <p>Put another way: the set is not claimed to be infinite because some member is infinite. It is claimed to be infinite because the successor function never produces anything outside the set. There is no natural number <em>n</em> for which <em>n</em>&#8239;+&#8239;1 fails to be a natural number.</p>
+        <p>This is a good answer to the question I asked, and my original argument does not survive it. If you accept the framework, the naturals are infinite and no individual number needs infinitely many digits.</p>
+      </div>
+    </section>
+
+    <section class="sec" id="s4">
+      <p class="sec-num">&sect;4</p>
+      <div class="sec-body">
+        <h2>Where I actually disagree</h2>
+        <p>What the reply revealed is that my objection was never really about digits. It was about the word <em>never</em> in &ldquo;the successor function never terminates.&rdquo;</p>
+        <p>The same thing bothers me about the ordinary notation <code>{1, 2, 3, ...}</code>. The ellipsis stands in for a listing that has no end, and then the closing brace asserts that the listing is nonetheless one object. I take the point that this is only informal shorthand, and that the formal definition does not list anything: &#8469; is defined as the smallest <em>inductive</em> set, a set containing &empty; and closed under the successor operation.</p>
+        <p>But that reformulation does not touch what I am objecting to. The closure property replaces the dots; it does not replace the existential claim. Something still has to assert that a set with that property exists, and in Zermelo&ndash;Fraenkel set theory that assertion is the Axiom of Infinity. So my objection is not to the notation, and it is not a misreading of the shorthand. It is to the step &mdash; in whatever notation &mdash; that closes the brace.</p>
+        <p>Two readings are available:</p>
+        <div class="fork">
+          <div class="fork-side is-accept">
+            <p class="fork-label">Potential infinity</p>
+            <p>The process of counting has no stopping point. However far you have gone, you can go further. At any stage, what you have produced is finite.</p>
+          </div>
+          <div class="fork-side is-reject">
+            <p class="fork-label">Actual (completed) infinity</p>
+            <p>There exists a single object &mdash; the set &#8469; &mdash; containing every natural number at once, as a finished totality.</p>
+          </div>
+        </div>
+        <p>The first reading I find unproblematic. It says something about a process and its lack of a limit. The second reading asserts the existence of a completed object, and it is that assertion I do not accept.</p>
+        <p>My position is that these are the only two coherent options, and that standard mathematics occupies an uncomfortable middle position between them: the successor process is treated as completed, while every product of it remains finite. If the process is genuinely completed, I would expect the completion to be reflected somewhere in the resulting object. It is not. If it is not completed, then what we have is unboundedness, not infinity.</p>
+        <p>I recognise that mainstream mathematics does not see this as a middle position at all, and regards &ldquo;infinitely many finite things&rdquo; as perfectly coherent. I simply do not, and I have not encountered an argument that dissolves the difficulty rather than restating the framework in which it does not arise.</p>
+      </div>
+    </section>
+
+    <section class="sec" id="s5">
+      <p class="sec-num">&sect;5</p>
+      <div class="sec-body">
+        <h2>The honest status of the disagreement</h2>
+        <p>The thing that took me longest to find out, and that I think is worth stating plainly, is this:</p>
+        <blockquote class="pull">
+          <hr>
+          <p>The existence of a completed infinite set is not a theorem of standard mathematics. It is an axiom.</p>
+          <hr>
+        </blockquote>
+        <p>In Zermelo&ndash;Fraenkel set theory it is called the Axiom of Infinity, and it asserts, in effect, that a set containing all the natural numbers exists. It cannot be derived from the other axioms. If you remove it, the remaining axioms are satisfied by the hereditarily finite sets &mdash; a perfectly coherent universe in which every set is finite. Rejecting completed infinity does not produce a contradiction. It produces a different, smaller mathematics.</p>
+        <p>So the disagreement is not between a proof and a mistake. It is between two starting points, one of which was adopted because of what could be built on top of it.</p>
+        <p>I think that is a legitimate reason to adopt it. I do not think it is the same thing as being shown that it is true.</p>
+      </div>
+    </section>
+
+    <section class="sec" id="s6">
+      <p class="sec-num">&sect;6</p>
+      <div class="sec-body">
+        <h2>What accepting this costs</h2>
+        <p>I want to be honest that the cost is real and I am not in a position to pay it.</p>
+        <p>Standard analysis &mdash; limits, continuity, integration, measure theory &mdash; is constructed on the real numbers, which are built from completed infinite sets. Most of modern probability and much of theoretical physics inherits this. It is sometimes suggested that constructive or predicative mathematics rescues most of this, and a surprising amount can indeed be recovered in weak systems; but those systems still take the natural numbers as an infinite totality. Strict finitism gives up considerably more.</p>
+        <p>I am not proposing that mathematics should be rebuilt. I am recording that I do not believe one of its starting assumptions, while continuing to use the mathematics that rests on it, in the same way one might use a map known to be a projection.</p>
+      </div>
+    </section>
+
+    <section class="sec" id="s7">
+      <p class="sec-num">&sect;7</p>
+      <div class="sec-body">
+        <h2>The tradition this belongs to</h2>
+        <p>I arrived at this on my own and found out only afterwards that it has a name. Anyone reaching the same place should know the following names earlier than I did:</p>
+        <ul class="roster">
+          <li>
+            <span class="who">Aristotle</span>
+            <span class="what">drew the distinction between potential and actual infinity in the <cite>Physics</cite>, and accepted only the former.</span>
+          </li>
+          <li>
+            <span class="who">Gauss</span>
+            <span class="what">in an 1831 letter to Schumacher, objected to the use of an infinite magnitude as a completed thing, calling it a manner of speaking rather than a legitimate object.</span>
+          </li>
+          <li>
+            <span class="who">Poincar&eacute;</span>
+            <span class="what">was a sustained critic of Cantorian set theory.</span>
+          </li>
+          <li>
+            <span class="who">Brouwer</span>
+            <span class="what">founded intuitionism, which admits potential but not actual infinity.</span>
+          </li>
+          <li>
+            <span class="who">Weyl</span>
+            <span class="what">in <cite>Das Kontinuum</cite>, attempted a predicative reconstruction of analysis out of similar misgivings.</span>
+          </li>
+          <li>
+            <span class="who">Yessenin-Volpin</span>
+            <span class="what">and, more recently, <b class="who-inline">Zeilberger</b> and <b class="who-inline">Nelson</b> have defended stricter forms &mdash; ultrafinitism &mdash; in which even very large finite numbers are treated with suspicion.</span>
+          </li>
+        </ul>
+        <p>The relevant survey articles are the Stanford Encyclopedia of Philosophy entries on <em>finitism</em>, <em>intuitionism</em>, and <em>the philosophy of mathematics</em>. They are free, and they are better than anything I could write.</p>
+      </div>
+    </section>
+
+    <section class="sec" id="s8">
+      <p class="sec-num">&sect;8</p>
+      <div class="sec-body">
+        <h2>Summary</h2>
+        <ul class="points">
+          <li><span>Cantor&rsquo;s diagonal argument is a valid derivation within ZFC. I deny one of its premises, so I do not accept its conclusion. This is not a claim that the derivation contains an error.</span></li>
+          <li><span>My original objection, that an infinite set requires infinitely many digit places, does not survive contact with the distinction between <em>unbounded</em> and <em>infinite</em>. I record it here because it is what led me to the real question.</span></li>
+          <li><span>The real question is whether a completed infinite totality is coherent. I do not think it is. A process with no stopping point cannot, in my view, be treated as having stopped.</span></li>
+          <li><span>This is a disagreement about an axiom, not a claim of error.</span></li>
+          <li><span>The position has a long history and I make no claim to originality.</span></li>
+        </ul>
+        <p class="coda">Anyone who wants to tell me where this goes wrong is welcome to. I would rather know.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="foot col">
+    <p class="said">Written 2026. No affiliation, no credential, no claim.</p>
+    <p class="links">
+      <a href="https://github.com/ndg13b/Infinity/blob/main/on-completed-infinity.md">Source text in Markdown</a><span class="sep">&middot;</span><a href="https://github.com/ndg13b/Infinity">Repository</a>
+    </p>
+  </footer>
+
+</div>
+</body>
+</html>
