@@ -1,6 +1,6 @@
 # On Completed Infinity
 
-*A short position note. Not a proof, and not a claim that anyone else is mistaken.*
+*A short position note. Not a proof, and not a claim that any derivation contains an error.*
 
 ---
 
@@ -131,12 +131,15 @@ are satisfied by the hereditarily finite sets — a perfectly coherent universe 
 which every set is finite. Rejecting completed infinity does not produce a
 contradiction. It produces a different, smaller mathematics.
 
-So the disagreement is not between a proof and a mistake. It is between two
-starting points, one of which was adopted because of what could be built on top
-of it.
+So the disagreement is not over a derivation. It is over a starting point, which
+was adopted because of what could be built on top of it.
 
-I think that is a legitimate reason to adopt it. I do not think it is the same
-thing as being shown that it is true.
+I think that is a legitimate reason to adopt an axiom. I do not think it is the
+same thing as being shown that the axiom describes something. And since I do not
+think a completed infinite totality is coherent, I do not think it does — which
+means I am disagreeing with the people who hold otherwise, not merely working in
+a different framework from them. I would rather say that plainly than pretend the
+difference is one of taste.
 
 ---
 
@@ -204,4 +207,4 @@ know.
 
 ---
 
-*Written 2026. No affiliation, no credential, no claim.*
+*Written 2026. No affiliation, no credential.*
