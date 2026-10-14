@@ -18,6 +18,7 @@ alleging an error.
 | [`on-completed-infinity.md`](on-completed-infinity.md) | The note in plain Markdown. This is the canonical text. |
 | [`index.html`](index.html) | The same text, typeset for the web. No build step, no dependencies. |
 | [`.github/workflows/pages.yml`](.github/workflows/pages.yml) | Publishes the page on every push to `main`. |
+| [`formal/`](formal/) | A machine-checked Lean 4 companion: the hereditarily finite sets really do satisfy the other axioms while refuting Infinity. See [`formal/README.md`](formal/README.md) for what it does and does not establish. |
 
 The two copies are kept in step by hand: if you edit the Markdown, carry the
 same edit into `index.html`.

@@ -1,0 +1,5 @@
+name = "oncompletedinfinity"
+defaultTargets = ["HF"]
+
+[[lean_lib]]
+name = "HF"
