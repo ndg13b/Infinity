@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Hereditarily Finite Universe</title>
+<meta name="description" content="A machine-checked companion to On Completed Infinity: the hereditarily finite sets satisfy the other ZF axioms and refute Infinity, verified in Lean 4 — with a plain statement of what no proof of this kind can deliver.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Hereditarily Finite Universe">
+<meta property="og:description" content="A machine-checked companion to On Completed Infinity, and a plain statement of its limits.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='25' x='2' font-size='24' font-family='serif'>&#8707;</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,200..700;1,6..72,200..600&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+/* ---- the defining line ---- */
+.axiom-line {
+  font-family:var(--mono); font-weight:400;
+  font-size:clamp(1.3rem,4.6vw,2.4rem);
+  line-height:1.25; letter-spacing:.01em; color:var(--ink);
+  margin:0; overflow-x:auto; scrollbar-width:none; padding-block:.15em;
+}
+.axiom-line::-webkit-scrollbar { display:none; }
+.axiom-line .op { color:var(--accent); padding-inline:.25em; }
+
+.provenance {
+  margin:0; font-family:var(--mono); font-size:.7rem; font-weight:500;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--dispute);
+}
+
+/* ---- results table ---- */
+.results { width:100%; border-collapse:collapse; margin:.35rem 0; font-size:.97em; }
+.results caption { text-align:left; font-size:.8125rem; font-family:var(--mono);
+  color:var(--ink-3); padding-bottom:.6rem; }
+.results th, .results td { text-align:left; padding:.7rem .8rem .7rem 0;
+  border-bottom:1px solid var(--rule-2); vertical-align:baseline; }
+.results thead th { font-family:var(--mono); font-size:.7rem; font-weight:500;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3);
+  border-bottom:1px solid var(--rule); padding-top:0; }
+.results tbody tr:last-child td { border-bottom:1px solid var(--rule); }
+.results td.name { font-family:var(--mono); font-size:.85em; color:var(--ink-2); }
+.results td.st { padding-right:0; text-align:right; white-space:nowrap; }
+.results tr.refuted td:first-child { font-weight:600; }
+.table-wrap { overflow-x:auto; }
+
+/* ---- the Rosetta rows: codes, bits, members ---- */
+.rosetta-wrap { overflow-x:auto; scrollbar-width:thin; padding-bottom:.4rem; margin:.5rem 0; }
+.rosetta { display:grid; grid-template-columns:4.5rem max-content max-content;
+  gap:.55rem 1.2rem; align-items:center; width:max-content; }
+.rz-row { display:contents; }
+.rz-head { font-family:var(--mono); font-size:.65rem; font-weight:500;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); }
+.rz-n { font-family:var(--mono); font-size:.85rem; color:var(--ink);
+  text-align:right; font-variant-numeric:tabular-nums; }
+.rz-bits { display:flex; gap:3px; }
+.rz-bits i { display:block; width:11px; height:11px; border-radius:1px;
+  border:1px solid var(--rule); background:transparent; }
+.rz-bits i.on { background:var(--accent); border-color:var(--accent); }
+.rz-set { font-family:var(--mono); font-size:.8rem; color:var(--ink-2);
+  font-variant-numeric:tabular-nums; }
+.rz-none { color:var(--ink-3); font-style:italic; font-family:var(--serif); font-size:.85rem; }
+.figcap { margin:.2rem 0 0; font-size:.9rem; line-height:1.5; color:var(--ink-2); }
+
+/* ---- limits panel: brick, matching the note's rejection colour ---- */
+.limits { padding-top:.9rem; border-top:2px solid var(--dispute-line);
+  display:flex; flex-direction:column; gap:.9rem; margin:.4rem 0; }
+.limits .lab { margin:0; font-family:var(--mono); font-size:.7rem; font-weight:500;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--dispute); }
+.limits p { margin:0; }
+
+/* ---- numbered caveats ---- */
+.caveats { margin:.35rem 0; padding:0; list-style:none;
+  display:flex; flex-direction:column; gap:1.3rem; counter-reset:cav; }
+.caveats li { display:grid; grid-template-columns:1.9rem minmax(0,1fr); gap:.85rem;
+  align-items:baseline; counter-increment:cav; }
+.caveats li::before { content:counter(cav); font-family:var(--mono); font-size:.8125rem;
+  color:var(--accent); font-variant-numeric:tabular-nums; }
+.caveats b { font-weight:600; }
+
+/* ---- code ---- */
+pre { margin:.35rem 0; padding:1rem 1.1rem; background:var(--sunk);
+  border:1px solid var(--rule-2); border-radius:3px; overflow-x:auto;
+  font-family:var(--mono); font-size:.8125rem; line-height:1.65; color:var(--ink-2); }
+pre code { background:none; border:0; padding:0; font-size:inherit; }
+pre .c { color:var(--ink-3); }
+pre .k { color:var(--accent); }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="hero col">
+    <p class="eyebrow">Formal companion &nbsp;/&nbsp; Lean 4</p>
+
+    <p class="axiom-line"><span>a</span><span class="op">&isin;</span><span>b</span><span class="op">iff</span><span>bit a of b is 1</span></p>
+
+    <p class="hero-note">The Ackermann interpretation. Every natural number codes one hereditarily finite set, and nothing else is needed to build a universe.</p>
+
+    <h1>The Hereditarily Finite Universe</h1>
+    <p class="dek">One sentence of the note, machine-checked &mdash; and a plain statement of what no proof of this kind can deliver.</p>
+
+    <p class="provenance">A companion to the note, not part of it</p>
+
+    <hr class="hero-rule">
+
+    <ol class="contents">
+      <li><a href="#s1"><span class="n">&sect;1</span> What is verified</a></li>
+      <li><a href="#s2"><span class="n">&sect;2</span> The model</a></li>
+      <li><a href="#s3"><span class="n">&sect;3</span> What this establishes</a></li>
+      <li><a href="#s4"><span class="n">&sect;4</span> What it does not</a></li>
+      <li><a href="#s5"><span class="n">&sect;5</span> Three caveats</a></li>
+      <li><a href="#s6"><span class="n">&sect;6</span> Consistent is not coherent</a></li>
+      <li><a href="#s7"><span class="n">&sect;7</span> Checking it yourself</a></li>
+      <li><a href="index.html"><span class="n">&larr;</span> Back to the note</a></li>
+    </ol>
+  </header>
+
+  <main class="article col">
+
+    <section class="sec" id="s1">
+      <p class="sec-num">&sect;1</p>
+      <div class="sec-body">
+        <h2>What is verified</h2>
+        <p>Section 5 of the note says that if you remove the Axiom of Infinity, <em>the remaining
+        axioms are satisfied by the hereditarily finite sets &mdash; a perfectly coherent universe
+        in which every set is finite.</em> That sentence is checkable, and this is the check.</p>
+        <div class="table-wrap">
+        <table class="results">
+          <caption>Lean 4.23.0, core only &mdash; no mathlib, no <code>sorry</code>.</caption>
+          <thead>
+            <tr><th>Axiom</th><th>Result</th><th class="st">Status</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Extensionality</td><td class="name">ext</td><td class="st"><span class="verdict is-true">holds</span></td></tr>
+            <tr><td>Empty set</td><td class="name">empty_exists</td><td class="st"><span class="verdict is-true">holds</span></td></tr>
+            <tr><td>Pairing</td><td class="name">pairing_exists</td><td class="st"><span class="verdict is-true">holds</span></td></tr>
+            <tr><td>Union</td><td class="name">mem_sUnion</td><td class="st"><span class="verdict is-true">holds</span></td></tr>
+            <tr><td>Separation</td><td class="name">mem_sep</td><td class="st"><span class="verdict is-true">holds</span></td></tr>
+            <tr><td>Power set</td><td class="name">mem_powerset</td><td class="st"><span class="verdict is-true">holds</span></td></tr>
+            <tr><td>Replacement</td><td class="name">mem_repl</td><td class="st"><span class="verdict is-true">holds</span></td></tr>
+            <tr><td>Foundation</td><td class="name">regularity, mem_induction</td><td class="st"><span class="verdict is-true">holds</span></td></tr>
+            <tr class="refuted"><td>Infinity</td><td class="name">infinity_fails</td><td class="st"><span class="verdict is-false">refuted</span></td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p>Separation and Replacement are stated for <em>arbitrary</em> predicates and functions,
+        not merely decidable or definable ones. Two further results sit alongside these.
+        <code>cantor_diagonal</code> is the diagonal argument over an arbitrary type, finite or not,
+        using no infinity whatsoever &mdash; which is the formal counterpart of the note&rsquo;s
+        &ldquo;I am not claiming Cantor made an error.&rdquo; Rejecting Infinity leaves the
+        construction untouched; it only removes the infinite object to apply it to. And
+        <code>no_universal_set</code>: nothing contains everything.</p>
+      </div>
+    </section>
+
+    <section class="sec" id="s2">
+      <p class="sec-num">&sect;2</p>
+      <div class="sec-body">
+        <h2>The model</h2>
+        <p>The universe is the natural numbers. Membership is read straight off the binary
+        expansion: <em>a</em> is a member of <em>b</em> exactly when the <em>a</em>-th bit of
+        <em>b</em> is set. So the members of a number are literally the positions of its ones.</p>
+        <div class="rosetta-wrap" role="img" aria-label="The codes 0, 1, 3, 11 and 2059 shown as bit patterns. Their members are 0; then 0 and 1; then 0, 1 and 3; then 0, 1, 3 and 11 — in each case exactly the codes listed above that row.">
+          <div class="rosetta">
+          <div class="rz-row rz-head"><span>code</span><span>bits, index 0 first</span><span>members</span></div>
+      <div class="rz-row">
+        <span class="rz-n">0</span>
+        <span class="rz-bits"><span class="rz-none">no bits set</span></span>
+        <span class="rz-set rz-none">∅</span>
+      </div>
+      <div class="rz-row">
+        <span class="rz-n">1</span>
+        <span class="rz-bits"><i class="on"></i></span>
+        <span class="rz-set">{0}</span>
+      </div>
+      <div class="rz-row">
+        <span class="rz-n">3</span>
+        <span class="rz-bits"><i class="on"></i><i class="on"></i></span>
+        <span class="rz-set">{0, 1}</span>
+      </div>
+      <div class="rz-row">
+        <span class="rz-n">11</span>
+        <span class="rz-bits"><i class="on"></i><i class="on"></i><i class=""></i><i class="on"></i></span>
+        <span class="rz-set">{0, 1, 3}</span>
+      </div>
+      <div class="rz-row">
+        <span class="rz-n">2059</span>
+        <span class="rz-bits"><i class="on"></i><i class="on"></i><i class=""></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class="on"></i></span>
+        <span class="rz-set">{0, 1, 3, 11}</span>
+      </div>
+          </div>
+        </div>
+        <p class="figcap">The von Neumann naturals. Each row&rsquo;s members are exactly the rows
+        above it &mdash; the construction is visible in the bits. Every code is finite, and the
+        codes grow without bound, so no code can have all of them as members. That is
+        <code>infinity_fails</code>.</p>
+        <p>The whole development turns on one lemma. Call it <code>mem_lt</code>: a member always
+        has a strictly smaller code, because a set bit at position <em>a</em> forces the number to
+        be at least 2<sup><em>a</em></sup>, which already exceeds <em>a</em>. Membership therefore descends,
+        every set is finite, and Foundation comes free. The same lemma is what defeats Infinity:
+        an inductive set would have to contain codes larger than itself.</p>
+      </div>
+    </section>
+
+    <section class="sec" id="s3">
+      <p class="sec-num">&sect;3</p>
+      <div class="sec-body">
+        <h2>What this establishes</h2>
+        <p>A theory with a model is consistent. So ZF&minus;Infinity does not prove Infinity:
+        Infinity is not a theorem but an axiom, exactly as the note says. The position the note
+        describes is not confused, and it is not a mistake about mathematics. There is a universe
+        in which every set is finite, it can be written down, and a machine can check it.</p>
+      </div>
+    </section>
+
+    <section class="sec" id="s4">
+      <p class="sec-num">&sect;4</p>
+      <div class="sec-body">
+        <h2>What it does not</h2>
+        <div class="limits">
+          <p class="lab">Not established, and not establishable</p>
+          <p>This does not show that completed infinity is incoherent, and no formal development
+          could. If ZF is consistent then Infinity cannot be refuted, so on the narrow formal
+          reading the record runs the other way.</p>
+        </div>
+        <p>That is worth stating flatly, because it is the thing a reader might hope a page headed
+        &ldquo;machine-checked&rdquo; would deliver. It does not. What it delivers is the weaker
+        and more useful thing: the disagreement is located precisely, at an axiom, which is where
+        the note always said it was.</p>
+      </div>
+    </section>
+
+    <section class="sec" id="s5">
+      <p class="sec-num">&sect;5</p>
+      <div class="sec-body">
+        <h2>Three caveats</h2>
+        <ol class="caveats">
+          <li><span><b>Soundness is not formalized here.</b> Lean verifies that this
+          <em>structure</em> satisfies these <em>sentences</em>. The step from there to &ldquo;the
+          first-order theory does not prove Infinity&rdquo; is the soundness theorem. It is
+          entirely standard, but it is taken outside the machine, and nothing here checks it.</span></li>
+          <li><span><b>Semantic, not schematic.</b> Separation and Replacement are axiom
+          <em>schemas</em> over formulas in the language of set theory. What is verified is the
+          semantic version, quantifying over arbitrary Lean predicates and functions. For this
+          purpose that is at least as strong &mdash; every definable predicate is in particular a
+          predicate &mdash; but it is a statement in Lean&rsquo;s type theory about a structure,
+          not a derivation inside a formalized first-order calculus.</span></li>
+          <li><span><b>The independence is two-sided, and only one side is cheap.</b> That
+          ZF&minus;Infinity cannot <em>prove</em> Infinity is witnessed here: the finite universe
+          can be written down and checked. That it cannot <em>refute</em> Infinity needs a model of
+          ZF, and by G&ouml;del&rsquo;s second incompleteness theorem ZF cannot prove one exists;
+          that half rests on assuming the consistency of ZF and cannot be exhibited the way this
+          file exhibits the finite universe. The asymmetry is real, and mildly congenial to the
+          note. But it is an asymmetry about the cost of exhibiting models of weaker against
+          stronger theories, which is generic, and it is not evidence that the stronger theory
+          describes nothing.</span></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="sec" id="s6">
+      <p class="sec-num">&sect;6</p>
+      <div class="sec-body">
+        <h2>Consistent is not coherent</h2>
+        <p>The note&rsquo;s thesis is that a completed infinite totality is <em>incoherent</em>. Formal
+        consistency is a different and weaker notion. This work shows that <em>denying</em>
+        Infinity is consistent. It says nothing about whether <em>asserting</em> it is coherent,
+        and on the narrow formal reading &ldquo;incoherent&rdquo; cannot mean
+        &ldquo;inconsistent&rdquo; here at all.</p>
+        <p class="coda">Formal work can locate a disagreement exactly. It cannot settle one.</p>
+      </div>
+    </section>
+
+    <section class="sec" id="s7">
+      <p class="sec-num">&sect;7</p>
+      <div class="sec-body">
+        <h2>Checking it yourself</h2>
+        <p>The file is self-auditing. A clean run prints the axiom dependencies of every result and
+        nothing else; any gap, any <code>sorry</code>, or any appeal to an extra axiom would appear
+        in that output.</p>
+<pre><code><span class="c"># Lean 4.23.0, no other dependencies</span>
+elan toolchain install leanprover/lean4:v4.23.0
+lean formal/HF.lean</code></pre>
+        <p>The audit it prints names only Lean&rsquo;s own <code>propext</code> and
+        <code>Quot.sound</code>, plus <code>Classical.choice</code> exactly where classical
+        reasoning was used on purpose. <code>sorryAx</code> &mdash; the marker for anything assumed
+        rather than proved &mdash; appears nowhere.</p>
+<pre><code>'HF.infinity_fails' depends on axioms: [propext, Quot.sound]
+'HF.cantor_diagonal' depends on axioms: [propext]</code></pre>
+        <p>A sanity section computes small cases &mdash; <code>P(&empty;) = {&empty;}</code>,
+        <code>succ 3 = 11</code>, <code>powerset 7 = 255</code> &mdash; so the theorems cannot be
+        vacuously true of a mis-stated encoding.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="foot col">
+    <p class="said">This companion was written and checked by Claude. The note itself is unchanged,
+    and makes no claim to machine-checked support.</p>
+    <p class="links">
+      <a href="index.html">On Completed Infinity</a><span class="sep">&middot;</span><a href="https://github.com/ndg13b/Infinity/blob/main/formal/HF.lean">HF.lean</a><span class="sep">&middot;</span><a href="https://github.com/ndg13b/Infinity/tree/main/formal">formal/</a><span class="sep">&middot;</span><a href="https://github.com/ndg13b/Infinity">Repository</a>
+    </p>
+  </footer>
+
+</div>
+</body>
+</html>
