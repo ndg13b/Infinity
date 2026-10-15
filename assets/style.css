@@ -1,0 +1,161 @@
+/* Shared design system for On Completed Infinity.
+   Tokens, base typography and the layout primitives every page uses.
+   Page-specific blocks live in each page's own <style>. */
+
+/* ---- tokens: light is the base, both dark states redefine only tokens ---- */
+
+:root {
+  --ground:#ECEEF2; --paper:#F8F9FB; --sunk:#E6E9EF;
+  --ink:#15181F; --ink-2:#4C5364; --ink-3:#6E7587;
+  --rule:#D3D7E0; --rule-2:#E3E6ED;
+  --accent:#1C5661; --accent-line:#4E8C97; --accent-soft:#E2EDEE;
+  --dispute:#9B3A32; --dispute-line:#C1776F; --dispute-soft:#F4E5E3;
+  --serif:"Newsreader",ui-serif,Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground:#0E1116; --paper:#161922; --sunk:#1C202A;
+    --ink:#E7E9EF; --ink-2:#A6ADBC; --ink-3:#848C9D;
+    --rule:#2B303B; --rule-2:#232833;
+    --accent:#7FBDC7; --accent-line:#3F6E77; --accent-soft:#163035;
+    --dispute:#E0958D; --dispute-line:#8A4C45; --dispute-soft:#33201E;
+  }
+}
+:root[data-theme="dark"] {
+  --ground:#0E1116; --paper:#161922; --sunk:#1C202A;
+  --ink:#E7E9EF; --ink-2:#A6ADBC; --ink-3:#848C9D;
+  --rule:#2B303B; --rule-2:#232833;
+  --accent:#7FBDC7; --accent-line:#3F6E77; --accent-soft:#163035;
+  --dispute:#E0958D; --dispute-line:#8A4C45; --dispute-soft:#33201E;
+}
+
+*,*::before,*::after { box-sizing:border-box; }
+html { -webkit-text-size-adjust:100%; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior:smooth; } }
+
+body {
+  margin:0;
+  background:var(--ground);
+  color:var(--ink);
+  font-family:var(--serif);
+  font-optical-sizing:auto;
+  font-size:clamp(1.0625rem, 0.5vw + 0.96rem, 1.1875rem);
+  font-weight:400;
+  line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+/* ---- the sheet ---- */
+
+.page {
+  max-width:78rem;
+  margin-inline:auto;
+  background:var(--paper);
+  padding:clamp(2.75rem,7vw,5.5rem) clamp(1.25rem,5vw,3rem) clamp(3rem,6vw,5rem);
+}
+@media (min-width:79rem) { .page { border-inline:1px solid var(--rule-2); } }
+
+.col { width:min(100%,68ch); margin-inline:auto; }
+
+/* ---- hero ---- */
+.hero { display:flex; flex-direction:column; gap:1.5rem; }
+.eyebrow {
+  margin:0; font-family:var(--mono); font-size:.7rem; font-weight:500;
+  letter-spacing:.2em; text-transform:uppercase; color:var(--ink-3);
+}
+.hero-note {
+  margin:0; max-width:34ch;
+  font-size:.9375rem; font-style:italic; font-weight:300;
+  line-height:1.5; color:var(--ink-2);
+}
+.hero h1 {
+  margin:0; font-weight:400;
+  font-size:clamp(2.15rem,6.5vw,3.4rem);
+  line-height:1.06; letter-spacing:-.022em;
+  text-wrap:balance;
+}
+.dek {
+  margin:0; max-width:44ch;
+  font-size:clamp(1.125rem,2.2vw,1.3125rem);
+  font-style:italic; font-weight:300; line-height:1.45; color:var(--ink-2);
+  text-wrap:pretty;
+}
+.hero-rule { height:1px; background:var(--rule); border:0; margin:.5rem 0 0; }
+
+/* ---- contents ---- */
+
+.contents { margin:0; padding:0; list-style:none;
+  display:grid; grid-template-columns:1fr; gap:.55rem 2.5rem; }
+@media (min-width:38rem) { .contents { grid-template-columns:1fr 1fr; } }
+.contents a {
+  display:flex; gap:.85rem; align-items:baseline;
+  font-family:var(--mono); font-size:.8125rem; line-height:1.4;
+  color:var(--ink-2); text-decoration:none;
+  border-bottom:1px solid transparent; padding-bottom:.1rem;
+}
+.contents a:hover { color:var(--ink); border-bottom-color:var(--rule); }
+.contents .n { color:var(--accent); flex:none; }
+
+/* ---- article ---- */
+
+.article { display:flex; flex-direction:column; gap:clamp(3rem,6.5vw,4.75rem); margin-top:clamp(3.5rem,8vw,6rem); }
+.sec { position:relative; scroll-margin-top:2rem; }
+.sec-num {
+  margin:0 0 .5rem; font-family:var(--mono); font-size:.75rem; font-weight:500;
+  letter-spacing:.08em; color:var(--accent);
+}
+@media (min-width:64rem) {
+  .sec-num { position:absolute; left:-4.75rem; top:.75rem; margin:0; text-align:right; width:3.25rem; }
+}
+.sec-body { display:flex; flex-direction:column; gap:1.1em; }
+.sec h2 {
+  margin:0; font-weight:400;
+  font-size:clamp(1.45rem,3.4vw,1.9rem);
+  line-height:1.18; letter-spacing:-.016em; text-wrap:balance;
+}
+.sec p { margin:0; text-wrap:pretty; }
+em, cite { font-style:italic; }
+cite { font-weight:400; }
+strong { font-weight:600; }
+code {
+  font-family:var(--mono); font-size:.86em;
+  background:var(--sunk); border:1px solid var(--rule-2);
+  border-radius:2px; padding:.08em .28em;
+}
+sup { font-size:.68em; line-height:0; vertical-align:.55em; }
+
+a { color:var(--accent); text-decoration-line:underline; text-decoration-thickness:1px;
+    text-underline-offset:.18em; text-decoration-color:var(--accent-line); }
+a:hover { text-decoration-thickness:2px; text-decoration-color:var(--accent); }
+:focus-visible { outline:2px solid var(--accent); outline-offset:3px; border-radius:2px; }
+
+/* ---- verdict pills: teal for what is accepted, brick for what is rejected ---- */
+.verdict {
+  font-family:var(--mono); font-size:.6875rem; font-weight:500;
+  letter-spacing:.14em; text-transform:uppercase;
+  padding:.25em .6em; border-radius:2px; border:1px solid; white-space:nowrap;
+}
+.verdict.is-true  { color:var(--accent);  border-color:var(--accent-line);  background:var(--accent-soft); }
+.verdict.is-false { color:var(--dispute); border-color:var(--dispute-line); background:var(--dispute-soft); }
+
+/* ---- closing line ---- */
+.coda {
+  margin:.75rem 0 0; padding-top:1.5rem; border-top:1px solid var(--rule);
+  font-size:1.1em; font-style:italic; font-weight:300; line-height:1.5; color:var(--ink);
+}
+
+/* ---- footer ---- */
+
+.foot { margin-top:clamp(4rem,9vw,6.5rem); padding-top:1.75rem; border-top:1px solid var(--rule);
+  display:flex; flex-direction:column; gap:.85rem; }
+.foot .said { margin:0; font-style:italic; font-weight:300; color:var(--ink-2); font-size:.9375rem; }
+.foot .links { margin:0; font-family:var(--mono); font-size:.75rem; line-height:1.9; color:var(--ink-3); }
+.foot .links a { color:var(--ink-2); text-decoration-color:var(--rule); }
+.foot .links a:hover { color:var(--accent); text-decoration-color:var(--accent); }
+.foot .sep { padding-inline:.6em; color:var(--rule); }
+
+@media (prefers-reduced-motion: reduce) {
+  *,*::before,*::after { animation-duration:.001ms !important; animation-delay:0s !important; transition-duration:.001ms !important; }
+}
