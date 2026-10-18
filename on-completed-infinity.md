@@ -116,6 +116,17 @@ at all, and regards "infinitely many finite things" as perfectly coherent. I
 simply do not, and I have not encountered an argument that dissolves the
 difficulty rather than restating the framework in which it does not arise.
 
+Put as plainly as I can, my commitment is this: **every count is a whole
+number.**
+
+I do not offer that as an argument. It is the position itself, in one line, and
+it can no more be proved than the Axiom of Infinity can. What it does is make
+the disagreement easy to see. If there were a single completed object containing
+every natural number, its count could not be a whole number: whatever whole
+number *k* is proposed, the numbers 1 through *k* + 1 are all members, so *k* is
+too small. Standard mathematics answers by admitting a count that is not a whole
+number. I answer by declining the object.
+
 ---
 
 ## The honest status of the disagreement
