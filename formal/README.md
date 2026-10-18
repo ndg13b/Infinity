@@ -45,8 +45,9 @@ unboundedness rather than meeting the objection.
 
 This is the formal form of the concession §3 of the note already makes. It does not
 support the thesis — and, for the reason just given, it does not refute it either.
-What it adds is precision about which half of the intuition was tracking something
-true.
+What it adds is precision about which half of the intuition holds in every
+framework, and exactly where the other half stops being a proof and becomes a
+choice.
 
 Base ten is used throughout to match the note; nothing depends on the base.
 
