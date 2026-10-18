@@ -12,9 +12,11 @@ A companion to §2 and §3 of *On Completed Infinity*. The note opens with this:
 
 The premise is correct, and it is proved below as `finite_of_uniform_digit_bound`.
 The conclusion does not follow, and the exact point of failure is a swap of two
-quantifiers, isolated below as `the_quantifier_swap`. The closing question has a
-precise answer, `unbounded_digit_lengths`: the digit places are distributed across
-the set, not concentrated in any member.
+quantifiers, isolated below as `the_quantifier_swap`. The closing question gets a
+precise answer inside the framework, `unbounded_digit_lengths`: the digit places are
+distributed across the set, not concentrated in any member. That answer presupposes
+the completed set it describes, so it does not meet the note's deeper objection,
+which is to that set.
 
 Base ten is used to match the note. Nothing below depends on the base.
 
@@ -150,9 +152,10 @@ theorem unbounded_set_of_finite_digit_numbers :
 
 /-! ## Where the infinitely many digit places are -/
 
-/-- **The answer to the note's question.** An unbounded set must contain numbers of
-    more than `n` digits, for every `n`. The unboundedly many digit places are
-    spread across the set; no member holds infinitely many of them. -/
+/-- **The framework's answer to the note's question.** An unbounded set must contain
+    numbers of more than `n` digits, for every `n`. The unboundedly many digit places
+    are spread across the set; no member holds infinitely many of them. The answer
+    presupposes a completed set to spread them across. -/
 theorem unbounded_digit_lengths {S : Nat → Prop} (h : Unbounded S) :
     ∀ n, ∃ x, S x ∧ n < numDigits x := by
   intro n

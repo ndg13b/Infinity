@@ -38,9 +38,15 @@ numbers of more than *n* digits, for every *n*. The unboundedly many digit place
 are real, and they are in the set — distributed across its members, never
 accumulated inside one. Each member stops; the lengths do not.
 
+That answer is given inside the framework it defends. To say the digit places are
+*in the set* presupposes a completed set to hold them, which is exactly what the
+note declines to grant. To a reader who denies completed infinity, it restates
+unboundedness rather than meeting the objection.
+
 This is the formal form of the concession §3 of the note already makes. It does not
-support the thesis. What it adds is precision about which half of the intuition was
-tracking something true.
+support the thesis — and, for the reason just given, it does not refute it either.
+What it adds is precision about which half of the intuition was tracking something
+true.
 
 Base ten is used throughout to match the note; nothing depends on the base.
 
