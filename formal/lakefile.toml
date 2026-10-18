@@ -1,5 +1,8 @@
 name = "oncompletedinfinity"
-defaultTargets = ["HF"]
+defaultTargets = ["HF", "Digits"]
 
 [[lean_lib]]
 name = "HF"
+
+[[lean_lib]]
+name = "Digits"

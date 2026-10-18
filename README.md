@@ -20,9 +20,9 @@ alleging an error.
 | --- | --- |
 | [`on-completed-infinity.md`](on-completed-infinity.md) | The note in plain Markdown. This is the canonical text. |
 | [`index.html`](index.html) | The same text, typeset for the web. |
-| [`formal.html`](formal.html) | The companion page: what the Lean development checks, and what it cannot. |
+| [`formal.html`](formal.html) | The companion page: what the Lean developments check, and what they cannot. |
 | [`assets/style.css`](assets/style.css) | Design tokens and layout shared by both pages. |
-| [`formal/`](formal/) | The Lean 4 development itself, with [`formal/README.md`](formal/README.md) stating its limits. |
+| [`formal/`](formal/) | Two Lean 4 developments — `Digits.lean` on the digit argument, `HF.lean` on the finite universe — with [`formal/README.md`](formal/README.md) stating their limits. |
 | [`.github/workflows/pages.yml`](.github/workflows/pages.yml) | Publishes both pages on every push to `main`. |
 
 No build step and no dependencies: the pages are plain HTML over one
