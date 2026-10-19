@@ -1,5 +1,58 @@
 # A formal companion to *On Completed Infinity*
 
+Two Lean 4 developments, both core-only and neither containing a `sorry`:
+
+| File | What it checks | Of the note |
+| --- | --- | --- |
+| [`Digits.lean`](Digits.lean) | The digit argument: where it is right, and the one quantifier that breaks it | §2–§3 |
+| [`HF.lean`](HF.lean) | The hereditarily finite sets satisfy the other ZF axioms and refute Infinity | §5 |
+
+## Digits.lean — the digit argument
+
+The note's opening intuition is that *n* digit places express at most 10ⁿ values,
+so an infinite set would need infinitely many digit places somewhere.
+
+**The premise is correct, and it is a theorem.** `finite_of_uniform_digit_bound`
+shows that if a single *n* bounds the digit count of every member of a set, that
+set has at most 10ⁿ members, witnessed by an explicit list of that length.
+`numDigits_le_iff` gives the exact correspondence — *at most n digits* is the same
+condition as *below 10ⁿ* — so the count is not merely an upper bound.
+
+**The conclusion does not follow, and the gap is one quantifier.**
+`the_quantifier_swap` proves both halves at once:
+
+| Statement | |
+| --- | --- |
+| `∀ x, ∃ n, numDigits x ≤ n` — every natural has a finite digit count | **true** |
+| `∃ n, ∀ x, numDigits x ≤ n` — one bound covers every natural | **false** |
+
+The argument needs the second. The naturals supply only the first. So the claim as
+literally stated is false in standard mathematics, and
+`unbounded_set_of_finite_digit_numbers` gives the counterexample: ℕ is unbounded,
+yet every member has a finite digit count, and no member has infinitely many
+digits because there is no such natural number.
+
+The note's closing question — *where, then, are the infinitely many digit places?*
+— has an exact answer in `unbounded_digit_lengths`: an infinite set must contain
+numbers of more than *n* digits, for every *n*. The unboundedly many digit places
+are real, and they are in the set — distributed across its members, never
+accumulated inside one. Each member stops; the lengths do not.
+
+That answer is given inside the framework it defends. To say the digit places are
+*in the set* presupposes a completed set to hold them, which is exactly what the
+note declines to grant. To a reader who denies completed infinity, it restates
+unboundedness rather than meeting the objection.
+
+This is the formal form of the concession §3 of the note already makes. It does not
+support the thesis — and, for the reason just given, it does not refute it either.
+What it adds is precision about which half of the intuition holds in every
+framework, and exactly where the other half stops being a proof and becomes a
+choice.
+
+Base ten is used throughout to match the note; nothing depends on the base.
+
+## HF.lean — the hereditarily finite universe
+
 [`HF.lean`](HF.lean) is a machine-checked verification of one sentence from §5
 of [the note](../on-completed-infinity.md):
 
@@ -8,7 +61,7 @@ of [the note](../on-completed-infinity.md):
 
 Checked by Lean 4.23.0, using Lean core only — no mathlib — with no `sorry`.
 
-## The model
+### The model
 
 The universe is `Nat`. Membership is the Ackermann interpretation:
 
@@ -19,7 +72,7 @@ number codes a distinct hereditarily finite set. The whole development turns on
 one lemma, `mem_lt`: **every member of a set has a strictly smaller code.** That
 is what makes every set finite, and it is what kills Infinity.
 
-## What is verified
+### What is verified
 
 | Axiom | Result | Note |
 | --- | --- | --- |
@@ -48,7 +101,7 @@ or left open. A `Sanity` section computes `P(∅) = {∅}`, `succ 3 = 11`,
 `powerset 7 = 255` and similar, so the theorems cannot be vacuously true of a
 mis-stated encoding.
 
-## What this establishes — and what it does not
+### What this establishes — and what it does not
 
 **It does establish the §5 claim.** A theory with a model is consistent, so
 ZF−Infinity does not prove Infinity. Infinity is not a theorem. It is an axiom,
@@ -59,7 +112,7 @@ about mathematics.
 development could. That is worth stating flatly, because it is the thing a
 reader might hope a "formal proof" would deliver here.
 
-## Three caveats, stated plainly
+### Three caveats, stated plainly
 
 1. **Soundness is not formalized here.** Lean verifies that this *structure*
    satisfies these *sentences*. The step from there to "the first-order theory
@@ -85,7 +138,7 @@ reader might hope a "formal proof" would deliver here.
    theories, which is generic, and it is not evidence that the stronger theory
    describes nothing.
 
-## Consistent is not the same as coherent
+### Consistent is not the same as coherent
 
 The note's thesis is that a completed infinite totality is *incoherent*. Formal
 consistency is a different and weaker notion. This file shows that **denying**
@@ -103,6 +156,7 @@ of error" — and nothing in this directory changes it.
 ```sh
 elan toolchain install leanprover/lean4:v4.23.0   # or: lake build
 lean HF.lean
+lean Digits.lean
 ```
 
 A clean run prints the axiom audit and nothing else. Any `sorry`, any gap, or
