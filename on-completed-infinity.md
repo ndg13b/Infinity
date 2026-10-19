@@ -162,9 +162,20 @@ Standard analysis — limits, continuity, integration, measure theory — is
 constructed on the real numbers, which are built from completed infinite sets.
 Most of modern probability and much of theoretical physics inherits this. It is
 sometimes suggested that constructive or predicative mathematics rescues most of
-this, and a surprising amount can indeed be recovered in weak systems; but those
-systems still take the natural numbers as an infinite totality. Strict finitism
-gives up considerably more.
+this, and a surprising amount can indeed be recovered in weak systems. Those
+systems are usually written as though the natural numbers were a completed
+totality, but for much of what they prove this turns out not to matter. Solomon
+Feferman argued that the mathematics science actually uses needs nothing
+stronger than ordinary arithmetic, and work by Harvey Friedman and Stephen
+Simpson showed that much of what large parts of analysis prove about whole
+numbers can be proved again without any completed infinity at all.
+
+The cost is still real, but narrower than it first appears. What is lost is
+Cantor's hierarchy of infinities, some generality, and a small number of facts
+about ordinary whole numbers whose only known proofs pass through the infinite.
+Goodstein's theorem, which says that a certain process on whole numbers always
+comes to an end, is the best-known. Strict finitism, which doubts even that
+counting can always go on, gives up considerably more.
 
 I am not proposing that mathematics should be rebuilt. I am recording that I do
 not believe one of its starting assumptions, while continuing to use the
